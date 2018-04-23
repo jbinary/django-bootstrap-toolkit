@@ -12,6 +12,12 @@ from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
 
+# Fix Python 2.x.
+try:
+    UNICODE_EXISTS = bool(type(unicode))
+except NameError:
+    unicode = lambda s: str(s)
+
 
 BOOTSTRAP_BASE_URL = getattr(settings, 'BOOTSTRAP_BASE_URL',
                              '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/'
@@ -96,19 +102,19 @@ def as_bootstrap(form_or_field, layout='vertical,false'):
 
     if isinstance(form_or_field, BaseForm):
         return get_template("bootstrap_toolkit/form.html").render(
-            Context({
+            {
                 'form': form_or_field,
                 'layout': layout,
                 'float': bootstrap_float,
-            })
+            }
         )
     elif isinstance(form_or_field, BoundField):
         return get_template("bootstrap_toolkit/field.html").render(
-            Context({
+            {
                 'field': form_or_field,
                 'layout': layout,
                 'float': bootstrap_float,
-            })
+            }
         )
     else:
         # Display the default
@@ -174,7 +180,7 @@ def pagination(page, pages_to_show=11):
     Generate Bootstrap pagination links from a page object
     """
     context = get_pagination_context(page, pages_to_show)
-    return get_template("bootstrap_toolkit/pagination.html").render(Context(context))
+    return get_template("bootstrap_toolkit/pagination.html").render(context)
 
 
 @register.filter
