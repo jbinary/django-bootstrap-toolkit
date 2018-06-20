@@ -180,7 +180,7 @@ def pagination(page, pages_to_show=11):
     Generate Bootstrap pagination links from a page object
     """
     context = get_pagination_context(page, pages_to_show)
-    return get_template("bootstrap_toolkit/pagination.html").render(context)
+    return get_template("bootstrap_toolkit/pagination.html").render(context.flatten())
 
 
 @register.filter
@@ -210,7 +210,7 @@ def bootstrap_messages(context, *args, **kwargs):
     """
     Show request messages in Bootstrap style
     """
-    return get_template("bootstrap_toolkit/messages.html").render(context)
+    return get_template("bootstrap_toolkit/messages.html").render(context.flatten())
 
 
 @register.inclusion_tag("bootstrap_toolkit/form.html")
